@@ -13,13 +13,10 @@ jobs:
     steps:
         - name: Checkout Repository
           uses: actions/checkout@v4
-    steps: 
         - name: build docker IMAGE_NAME
           run: docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
-    steps:
         - nume: run docker container
           run: docker run -d --name ${CONTAINER_NAME} -p 80:80 ${IMAGE_NAME}:${IMAGE_TAG}
-    steps: 
         - name: print message
           run: echo "succsssfull"
     
