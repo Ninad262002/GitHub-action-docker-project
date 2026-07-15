@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Reinvented Self</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --dark-gold: #8B6914;
+    --cream: #F5EDD6;
+    --ink: #0D0D0D;
+    --ember: #D4420A;
+    --ice: #A8C8D8;
+    --purple: #4A2060;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0A0A0A;
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BACKGROUND TEXTURE */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(212,66,10,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(74,32,96,0.1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NOISE GRAIN */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  .container { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 60px 0 40px;
+    position: relative;
+  }
+
+  .hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 20px;
+    animation: fadeDown 1s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(28px, 6vw, 56px);
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--gold) 0%, #FFF5D6 40%, var(--gold) 60%, var(--dark-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeDown 1s 0.2s ease both;
+    opacity: 0;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    font-style: italic;
+    color: var(--cream);
+    opacity: 0.5;
+    margin-top: 16px;
+    animation: fadeDown 1s 0.4s ease both;
+  }
+
+  .divider {
+    display: flex; align-items: center; gap: 16px;
+    margin: 40px 0;
+    animation: fadeIn 1s 0.6s ease both; opacity: 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
+  .divider-gem { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); }
+
+  /* TRINITY */
+  .trinity {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin: 0 0 60px;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .pillar {
+    padding: 32px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: all 0.4s ease;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute; inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .pillar:hover::before { opacity: 1; }
+  .pillar:hover { transform: translateY(-4px); }
+
+  .pillar-kobe::before { background: radial-gradient(ellipse at center, rgba(212,66,10,0.15), transparent 70%); }
+  .pillar-dhoni::before { background: radial-gradient(ellipse at center, rgba(168,200,216,0.12), transparent 70%); }
+  .pillar-wb::before { background: radial-gradient(ellipse at center, rgba(201,168,76,0.15), transparent 70%); }
+
+  .pillar + .pillar { border-left: 1px solid rgba(201,168,76,0.15); }
+
+  .pillar-icon { font-size: 40px; margin-bottom: 12px; display: block; }
+
+  .pillar-name {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .pillar-kobe .pillar-name { color: var(--ember); }
+  .pillar-dhoni .pillar-name { color: var(--ice); }
+  .pillar-wb .pillar-name { color: var(--gold); }
+
+  .pillar-tagline {
+    font-size: 13px;
+    font-style: italic;
+    opacity: 0.55;
+    line-height: 1.5;
+  }
+
+  /* TRAIT CARDS */
+  .section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-bottom: 24px;
+  }
+
+  .traits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  .trait-card {
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .trait-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateY(-2px);
+  }
+
+  .trait-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+  }
+
+  .trait-card.kobe-trait::after { background: var(--ember); }
+  .trait-card.dhoni-trait::after { background: var(--ice); }
+  .trait-card.wb-trait::after { background: var(--gold); }
+  .trait-card.fusion-trait::after { background: linear-gradient(to bottom, var(--ember), var(--ice), var(--gold)); }
+
+  .trait-source {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-bottom: 8px;
+  }
+
+  .trait-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: var(--cream);
+  }
+
+  .trait-desc {
+    font-size: 15px;
+    line-height: 1.7;
+    opacity: 0.7;
+    font-weight: 300;
+  }
+
+  /* MANTRAS */
+  .mantras { margin-bottom: 60px; }
+
+  .mantra-item {
+    display: flex;
+    gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    align-items: flex-start;
+    transition: padding-left 0.3s;
+  }
+
+  .mantra-item:hover { padding-left: 8px; }
+
+  .mantra-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    opacity: 0.4;
+    min-width: 30px;
+    padding-top: 4px;
+  }
+
+  .mantra-text {
+    font-size: 20px;
+    font-style: italic;
+    line-height: 1.5;
+    font-weight: 300;
+    flex: 1;
+  }
+
+  .mantra-origin {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    opacity: 0.3;
+    text-transform: uppercase;
+    min-width: 70px;
+    text-align: right;
+    padding-top: 6px;
+  }
+
+  /* DAILY CODE */
+  .code-block {
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 40px;
+    position: relative;
+    margin-bottom: 60px;
+    background: rgba(201,168,76,0.02);
+  }
+
+  .code-block::before {
+    content: 'THE DAILY CODE';
+    position: absolute;
+    top: -10px; left: 24px;
+    background: #0A0A0A;
+    padding: 0 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: var(--gold);
+  }
+
+  .code-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .code-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin-top: 9px;
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  .code-text {
+    font-size: 16px;
+    line-height: 1.7;
+    opacity: 0.8;
+  }
+
+  .code-text strong {
+    color: var(--gold);
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  /* CLOSING */
+  .closing {
+    text-align: center;
+    padding: 40px 0;
+  }
+
+  .closing-quote {
+    font-size: clamp(22px, 4vw, 36px);
+    font-style: italic;
+    line-height: 1.5;
+    font-weight: 300;
+    background: linear-gradient(135deg, var(--cream) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .closing-name {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    opacity: 0.5;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .fade-in {
+    animation: fadeIn 1s ease both;
+  }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .trinity { grid-template-columns: 1fr; }
+    .pillar + .pillar { border-left: none; border-top: 1px solid rgba(201,168,76,0.15); }
+    .traits-grid { grid-template-columns: 1fr; }
+    .mantra-origin { display: none; }
+    .code-block { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">Your Reinvention Blueprint</div>
+    <div class="hero-title">The Sovereign</div>
+    <div class="hero-sub">Kobe Bryant · MS Dhoni · Edward Newgate</div>
+  </div>
+
+  <div class="divider fade-in">
+    <div class="divider-line"></div>
+    <div class="divider-gem"></div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- TRINITY -->
+  <div class="trinity fade-in">
+    <div class="pillar pillar-kobe">
+      <span class="pillar-icon">🔥</span>
+      <div class="pillar-name">Kobe Bryant</div>
+      <div class="pillar-tagline">The obsessive. The one who outworks everyone in the dark.</div>
+    </div>
+    <div class="pillar pillar-dhoni">
+      <span class="pillar-icon">🧊</span>
+      <div class="pillar-name">MS Dhoni</div>
+      <div class="pillar-tagline">The unshakeable. Calm under fire, decisive when it counts.</div>
+    </div>
+    <div class="pillar pillar-wb">
+      <span class="pillar-icon">⚓</span>
+      <div class="pillar-name">Whitebeard</div>
+      <div class="pillar-tagline">The titan. Power wielded for those who call you family.</div>
+    </div>
+  </div>
+
+  <!-- CORE TRAITS -->
+  <div class="section-title">Core Traits</div>
+  <div class="traits-grid fade-in">
+
+    <div class="trait-card kobe-trait">
+      <div class="trait-source">From Kobe</div>
+      <div class="trait-title">Mamba Obsession</div>
+      <div class="trait-desc">You are never satisfied with yesterday. Every day is a chance to find a flaw and eliminate it. You study your craft like a scientist, and you outwork the room — quietly, before anyone else is watching.</div>
+    </div>
+
+    <div class="trait-card dhoni-trait">
+      <div class="trait-source">From Dhoni</div>
+      <div class="trait-title">Ice-Cold Composure</div>
+      <div class="trait-desc">The bigger the moment, the slower your breathing. You don't panic. You don't flinch. You process the chaos around you and make your move with surgical precision — then let results speak.</div>
+    </div>
+
+    <div class="trait-card wb-trait">
+      <div class="trait-source">From Whitebeard</div>
+      <div class="trait-title">Unbreakable Loyalty</div>
+      <div class="trait-desc">Your crew, your family, your people — you'd move mountains for them. You lead not by fear but by love. People follow you because they know you'd never leave them behind, no matter the cost.</div>
+    </div>
+
+    <div class="trait-card kobe-trait">
+      <div class="trait-source">From Kobe</div>
+      <div class="trait-title">Relentless Reinvention</div>
+      <div class="trait-desc">When your first game fails, you rebuild. You don't stay attached to who you were — you're obsessed with who you're becoming. You study failures longer than victories.</div>
+    </div>
+
+    <div class="trait-card dhoni-trait">
+      <div class="trait-source">From Dhoni</div>
+      <div class="trait-title">Unconventional Thinking</div>
+      <div class="trait-desc">You trust your gut over the crowd. You're not afraid to make a call no one else would — to bat last, to back the underdog, to take the path that looks wrong on paper but feels right in your bones.</div>
+    </div>
+
+    <div class="trait-card wb-trait">
+      <div class="trait-source">From Whitebeard</div>
+      <div class="trait-title">Commanding Presence</div>
+      <div class="trait-desc">You don't enter a room — you arrive. Not with arrogance, but with a settled, immovable energy. People feel your weight without you saying a word. That presence is earned, not performed.</div>
+    </div>
+
+    <div class="trait-card fusion-trait">
+      <div class="trait-source">The Fusion</div>
+      <div class="trait-title">Disciplined Warmth</div>
+      <div class="trait-desc">Most leaders are either hard or soft. You are both — burning with ambition and precision, yet the person people call when they're broken. Your toughness never comes at the cost of your humanity.</div>
+    </div>
+
+    <div class="trait-card fusion-trait">
+      <div class="trait-source">The Fusion</div>
+      <div class="trait-title">Legacy Over Ego</div>
+      <div class="trait-desc">Kobe chased greatness. Dhoni chased wins. Whitebeard chased family. You chase all three — and you understand that what outlives you matters more than what you take home tonight.</div>
+    </div>
+
+  </div>
+
+  <!-- MANTRAS -->
+  <div class="section-title">Your Mantras</div>
+  <div class="mantras fade-in">
+    <div class="mantra-item">
+      <div class="mantra-num">01</div>
+      <div class="mantra-text">"The work that no one sees is the only work that counts."</div>
+      <div class="mantra-origin">Kobe</div>
+    </div>
+    <div class="mantra-item">
+      <div class="mantra-num">02</div>
+      <div class="mantra-text">"Keep your face to the sun and your feet on the ground."</div>
+      <div class="mantra-origin">Dhoni</div>
+    </div>
+    <div class="mantra-item">
+      <div class="mantra-num">03</div>
+      <div class="mantra-text">"I don't need a throne. I need a crew worth dying for."</div>
+      <div class="mantra-origin">Whitebeard</div>
+    </div>
+    <div class="mantra-item">
+      <div class="mantra-num">04</div>
+      <div class="mantra-text">"Pressure is not a burden. It is a signal that you are finally in the right place."</div>
+      <div class="mantra-origin">Fusion</div>
+    </div>
+    <div class="mantra-item">
+      <div class="mantra-num">05</div>
+      <div class="mantra-text">"Be so disciplined in private that you look effortless in public."</div>
+      <div class="mantra-origin">Fusion</div>
+    </div>
+  </div>
+
+  <!-- DAILY CODE -->
+  <div class="code-block fade-in">
+    <div class="code-item">
+      <div class="code-dot"></div>
+      <div class="code-text"><strong>Train when no one's watching.</strong> Your 5 AM is your edge. Protect it. The Mamba didn't wait for motivation — he built a system.</div>
+    </div>
+    <div class="code-item">
+      <div class="code-dot"></div>
+      <div class="code-text"><strong>Breathe before you react.</strong> When everything is on fire, slow down by one second. That second is where Dhoni lived. That second is where matches are won.</div>
+    </div>
+    <div class="code-item">
+      <div class="code-dot"></div>
+      <div class="code-text"><strong>Protect your people fiercely.</strong> Your loyalty is not a weakness — it's your greatest power. Those you love should feel that protection like a shield. Whitebeard would march into war for one son.</div>
+    </div>
+    <div class="code-item">
+      <div class="code-dot"></div>
+      <div class="code-text"><strong>Never let your emotions choose your words.</strong> Speak with intention. Stay silent when in doubt. Words said in heat cost years of trust.</div>
+    </div>
+    <div class="code-item">
+      <div class="code-dot"></div>
+      <div class="code-text"><strong>Be unimpressed by your own victories.</strong> Celebrate briefly. Return to work. The next mountain is already waiting.</div>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="closing fade-in">
+    <div class="divider" style="margin-bottom: 40px;">
+      <div class="divider-line"></div>
+      <div class="divider-gem"></div>
+      <div class="divider-line"></div>
+    </div>
+    <div class="closing-quote">"The world's greatest danger is a man who has found what he is willing to die for."</div>
+    <div class="closing-name">— The Sovereign · Your New Identity</div>
+  </div>
+
+</div>
+</body>
+</html>
