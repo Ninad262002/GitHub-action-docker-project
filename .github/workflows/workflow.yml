@@ -8,7 +8,7 @@ env:
 jobs:
   job1:
     name: docker deployment
-    runs_on: ubuntu:latest
+    runs-on: ubuntu:latest
 
     steps:
         - name: Checkout Repository
