@@ -18,5 +18,6 @@ jobs:
         - name: run docker container
           run: docker run -d --name ${CONTAINER_NAME} -p 80:80 ${IMAGE_NAME}:${IMAGE_TAG}
         - name: print message
-          run: echo "succsssfull"
+          run: echo "succsssfull" 
+          
     
